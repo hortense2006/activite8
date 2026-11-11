@@ -4,7 +4,8 @@ import java.util.*;
 
 public class Graphe {
     /* attributs à compléter */
-
+    private int orient;
+    ArrayList<Sommet> l_sommets;
 
     /* chargement du graphe*/
     public void charger(String ficName)throws IOException {
@@ -20,7 +21,7 @@ public class Graphe {
         sc.nextLine();
         int id;
         String nom;
-        //lecture, création et ajout des sommets dans l'ARrayList
+        //lecture, création et ajout des sommets dans l'ArrayList
         for(int i=0;i<n;i++){
             id=sc.nextInt();
             nom=sc.next();
@@ -51,7 +52,27 @@ public class Graphe {
     /*exploration en largeur à partir d'un sommet s
     retour : liste des sommets explorés*/
     public ArrayList<Sommet> explorerLargeur(Sommet s){
-        /* METHODE A COPLETER */
+        /* METHODE A COMPLETER */
+        Queue<Sommet> q =new ArrayDeque<>();
+        ArrayList<Sommet> sommetsVisites= new ArrayList<>();
+        q.offer(s); // On ajoute le sommet de départ à la fin
+        sommetsVisites.add(s); // On ajoute le sommet de départ à la liste des sommets explorés
+        while(!q.isEmpty()) // Tant que la file q n'est pas vide, on continue
+        {
+            Sommet courant =q.poll();
+            System.out.println(courant.getId());
+            for(Sommet voisin : courant.getSuccesseurs())
+            {
+                if(!sommetsVisites.contains(voisin))
+                {
+                   sommetsVisites.add(voisin);
+                   q.offer(voisin);
+                }
+            }
+        }
+        return sommetsVisites;
+    }
+
 
 
 
