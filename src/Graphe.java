@@ -8,7 +8,8 @@ public class Graphe {
     ArrayList<Sommet> l_sommets;
 
     /* chargement du graphe*/
-    public void charger(String ficName)throws IOException {
+    public void charger(String ficName)throws IOException
+    {
         //ouverture du fichier en lecture
         Scanner sc=new Scanner(new File(ficName));
         //lecture de l'orientation
@@ -22,7 +23,8 @@ public class Graphe {
         int id;
         String nom;
         //lecture, création et ajout des sommets dans l'ArrayList
-        for(int i=0;i<n;i++){
+        for(int i=0;i<n;i++)
+        {
             id=sc.nextInt();
             nom=sc.next();
             sc.nextLine();
@@ -30,7 +32,8 @@ public class Graphe {
         }
         //lecture des liens
         int id1,id2;
-        while(sc.hasNextLine()){
+        while(sc.hasNextLine())
+        {
             //lecture des extrémités
             id1=sc.nextInt();
             id2=sc.nextInt();
@@ -43,16 +46,18 @@ public class Graphe {
         sc.close();
     }
     // Chercher et retourner un sommet d'après son id
-    public Sommet getSommet(int id){
-        for(Sommet s:l_sommets){
+    public Sommet getSommet(int id)
+    {
+        for(Sommet s:l_sommets)
+        {
             if(s.getId()==id) return s;
         }
         return null;
     }
     /*exploration en largeur à partir d'un sommet s
     retour : liste des sommets explorés*/
-    public ArrayList<Sommet> explorerLargeur(Sommet s){
-        /* METHODE A COMPLETER */
+    public ArrayList<Sommet> explorerLargeur(Sommet s)
+    {
         Queue<Sommet> q =new ArrayDeque<>();
         ArrayList<Sommet> sommetsVisites= new ArrayList<>();
         q.offer(s); // On ajoute le sommet de départ à la fin
@@ -72,46 +77,28 @@ public class Graphe {
         }
         return sommetsVisites;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
     /*exploration en profondeur à partir d'un sommet s
     version itérative avec pile
    retour : liste des sommets explorés*/
-    public ArrayList<Sommet> explorerProfondeur_it(Sommet s){
+    public ArrayList<Sommet> explorerProfondeur_it(Sommet s)
+    {
         ArrayList<Sommet> l_decouverts=new ArrayList<Sommet>();
         Stack<Sommet> pile=new Stack<Sommet>();
         ArrayList<Boolean> marque=new ArrayList<Boolean>(l_sommets.size());
-        for(int i=0;i<l_sommets.size();i++){
+        for(int i=0;i<l_sommets.size();i++)
+        {
             marque.add(i,false);
         }
         pile.push(s);
         marque.set(s.getId(),true);
         l_decouverts.add(s);
-        while(!pile.isEmpty()){
+        while(!pile.isEmpty())
+        {
             s=pile.pop();
-            for(Sommet succ:s.getSuccesseurs()){
-                if(!(marque.get(succ.getId()))){
+            for(Sommet succ:s.getSuccesseurs())
+            {
+                if(!(marque.get(succ.getId())))
+                {
                     marque.set(succ.getId(),true);
                     pile.push(succ);
                     l_decouverts.add(succ);
@@ -123,18 +110,41 @@ public class Graphe {
     /*exploration en profondeur à partir d'un sommet s
     version récursive
    retour : liste des sommets explorés*/
-    public ArrayList<Sommet> explorerProfondeur_rec(Sommet s){
-
+    public ArrayList<Sommet> explorerProfondeur_rec(Sommet s)
+    {
+        ArrayList<Sommet> l_decouverts=new ArrayList<>();
+        ArrayList<Boolean> marques =new ArrayList<>();
+        //INITIALISATION
+        for(Sommet sommet : l_sommets)
+        {
+            marques.add(false);
+        }
+        parcoursProfondeur_rec(s,l_decouverts,marques);
+        return l_decouverts;
     }
-    public void parcoursProfondeur_rec(Sommet s,ArrayList<Sommet> l_decouverts,ArrayList<Boolean> marque){
-
-        
+    public void parcoursProfondeur_rec(Sommet s,ArrayList<Sommet> l_decouverts,ArrayList<Boolean> marque)
+    {
+        int indice = l_sommets.indexOf(s);
+        if(indice == -1 || marque.get(indice)){return;}
+        marque.set(indice,true);// on marque le sommet comme ayant été visité
+        l_decouverts.add(s);// On l'ajoute à la liste des sommets découverts
+        for(Sommet voisin : s.getSuccesseurs()) // On explore tous les successeurs du sommet découvert
+        {
+            int indiceVoisin = l_sommets.indexOf(voisin);
+            if(indiceVoisin == -1 || marque.get(indiceVoisin))
+            {
+                parcoursProfondeur_rec(voisin,l_decouverts,marque);
+            }
+        }
     }
     /* Affichage des listes de successeurs*/
-    public void afficherListeSucc(){
-        for(Sommet s:l_sommets){
+    public void afficherListeSucc()
+    {
+        for(Sommet s:l_sommets)
+        {
             System.out.print(s.getId()+":");
-            for(Sommet succ:s.getSuccesseurs()){
+            for(Sommet succ:s.getSuccesseurs())
+            {
                 System.out.print(succ.getId()+" ");
             }
             System.out.println();
