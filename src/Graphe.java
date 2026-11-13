@@ -150,4 +150,84 @@ public class Graphe {
             System.out.println();
         }
     }
+
+    public ArrayList<Sommet> BFS_Parents(Sommet s) {
+        ArrayList<Sommet> l_parents = new ArrayList<>();
+        ArrayList<Boolean> marque = new ArrayList<>();
+        Queue<Sommet> file = new LinkedList<>();
+
+        for (int i = 0; i < l_sommets.size(); i++) {
+            l_parents.add(null);
+            marque.add(false);
+        }
+
+        file.add(s);
+        marque.set(s.getId(), true);
+
+        while (!file.isEmpty()) {
+            Sommet courant = file.poll();
+
+            for (Sommet succ : courant.getSuccesseurs()) {
+                if (!marque.get(succ.getId())) {
+                    marque.set(succ.getId(), true);
+                    l_parents.set(succ.getId(), courant);
+                    file.add(succ);
+                }
+            }
+        }
+
+        return l_parents;
+    }
+
+    public ArrayList<Sommet> DFS_parents(Sommet s) {
+        ArrayList<Sommet> l_parents = new ArrayList<>();
+        ArrayList<Boolean> marque = new ArrayList<>();
+
+        for (int i = 0; i < l_sommets.size(); i++) {
+            l_parents.add(null);
+            marque.add(false);
+        }
+
+        marque.set(s.getId(), true);
+        parcoursDFSParents(s, l_parents, marque);
+
+        return l_parents;
+    }
+
+    private void parcoursDFSParents(
+            Sommet s,
+            ArrayList<Sommet> l_parents,
+            ArrayList<Boolean> marque) {
+
+        for (Sommet succ : s.getSuccesseurs()) {
+            if (!marque.get(succ.getId())) {
+                marque.set(succ.getId(), true);
+                l_parents.set(succ.getId(), s);
+
+                parcoursDFSParents(succ, l_parents, marque);
+            }
+        }
+    }
+
+    public ArrayList<Sommet> retrouverChemin(
+            Sommet s1,
+            Sommet s2,
+            ArrayList<Sommet> l_parents) {
+
+        ArrayList<Sommet> chemin = new ArrayList<>();
+
+        Sommet courant = s2;
+
+        while (courant != null) {
+            chemin.add(0, courant);
+
+            if (courant.equals(s1)) {
+                return chemin;
+            }
+
+            courant = l_parents.get(courant.getId());
+        }
+
+        return new ArrayList<>();
+    }
 }
