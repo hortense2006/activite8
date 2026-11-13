@@ -193,7 +193,6 @@ public class Graphe {
 
         return l_parents;
     }
-
     private void parcoursDFSParents(
             Sommet s,
             ArrayList<Sommet> l_parents,
@@ -230,4 +229,48 @@ public class Graphe {
 
         return new ArrayList<>();
     }
+
+
+    public ArrayList<ArrayList<Sommet>> chercherCC() {
+        ArrayList<ArrayList<Sommet>> composantes = new ArrayList<>();
+        ArrayList<Sommet> visites = new ArrayList<>();
+
+        for (Sommet depart : l_sommets) {
+
+            if (!visites.contains(depart)) {
+                ArrayList<Sommet> composante = new ArrayList<>();
+                Queue<Sommet> file = new LinkedList<>();
+
+                file.add(depart);
+                visites.add(depart);
+
+                while (!file.isEmpty()) {
+                    Sommet courant = file.poll();
+                    composante.add(courant);
+
+                    // Explorer les successeurs
+                    for (Sommet succ : courant.getSuccesseurs()) {
+                        if (!visites.contains(succ)) {
+                            visites.add(succ);
+                            file.add(succ);
+                        }
+                    }
+
+                    // Explorer aussi les arcs entrants
+                    for (Sommet sommet : l_sommets) {
+                        if (sommet.getSuccesseurs().contains(courant)
+                                && !visites.contains(sommet)) {
+                            visites.add(sommet);
+                            file.add(sommet);
+                        }
+                    }
+                }
+
+                composantes.add(composante);
+            }
+        }
+
+        return composantes;
+    }
+
 }
