@@ -273,4 +273,8 @@ public class Graphe {
         return composantes;
     }
 
+    public boolean testerConnexite() {
+        return chercherCC().size() == 1;
+    }
+
 }
